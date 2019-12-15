@@ -38,5 +38,10 @@ public class UserController {
     public Mono<User> createUser(@RequestBody User user) {
         return userRepository.save(user);
     }
+
+    @DeleteMapping("/{userId}")
+    public Mono<String> deleteUser(@PathVariable String userId) {
+        return userRepository.findById(userId).flatMap(user -> userRepository.delete(user)).then(Mono.just("Deleted"));
+    }
 }
 
