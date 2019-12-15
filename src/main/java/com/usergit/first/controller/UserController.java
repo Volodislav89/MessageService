@@ -30,8 +30,13 @@ public class UserController {
         return userRepository.findById(userId).flatMap(existingUser -> {
             existingUser.setName(user.getName());
             existingUser.setAge(user.getAge());
-            return  userRepository.save(existingUser);
+            return userRepository.save(existingUser);
         });
+    }
+
+    @PostMapping
+    public Mono<User> createUser(@RequestBody User user) {
+        return userRepository.save(user);
     }
 }
 
