@@ -18,7 +18,7 @@ public class UserController {
 
     @GetMapping
     public Flux<User> getAllUsers() {
-        return userRepository.findAll(Sort.by(Sort.Direction.ASC));
+        return userRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
     }
     @GetMapping("/{userId}")
     public Mono<User> getUserById(@PathVariable String userId) {
