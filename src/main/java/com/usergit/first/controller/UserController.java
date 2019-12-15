@@ -24,5 +24,14 @@ public class UserController {
     public Mono<User> getUserById(@PathVariable String userId) {
         return userRepository.findById(userId);
     }
+
+    @PutMapping("/{userId}")
+    public Mono<User> updateUser(@PathVariable String userId, @RequestBody User user) {
+        return userRepository.findById(userId).flatMap(existingUser -> {
+            existingUser.setName(user.getName());
+            existingUser.setAge(user.getAge());
+            return  userRepository.save(existingUser);
+        });
+    }
 }
 
