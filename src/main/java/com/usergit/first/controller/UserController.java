@@ -3,10 +3,20 @@ package com.usergit.first.controller;
 import com.usergit.first.model.User;
 import com.usergit.first.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.MediaType;
+import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.io.IOException;
+import java.nio.channels.AsynchronousFileChannel;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 @RestController
 @CrossOrigin
@@ -42,6 +52,19 @@ public class UserController {
     @DeleteMapping("/{userId}")
     public Mono<String> deleteUser(@PathVariable String userId) {
         return userRepository.findById(userId).flatMap(user -> userRepository.delete(user)).then(Mono.just("Deleted"));
+    }
+
+    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Mono<String> uploadFile(@RequestPart("file") FilePart filePart) throws IOException {
+        System.out.println(filePart.filename());
+        Path path = Files.createFile(Paths.get("upload", filePart.filename()));
+        AsynchronousFileChannel channel = AsynchronousFileChannel.open(path, StandardOpenOption.WRITE);
+        DataBufferUtils.write(filePart.content(), channel, 0)
+                .doOnComplete(() -> {
+                    System.out.println("Done");
+                }).subscribe();
+        System.out.println(path.toString());
+        return Mono.just(filePart.filename());
     }
 }
 
