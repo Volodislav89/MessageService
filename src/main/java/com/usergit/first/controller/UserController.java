@@ -24,5 +24,10 @@ public class UserController {
     public Mono<User> getUserById(@PathVariable String userId) {
         return userRepository.findById(userId);
     }
+
+    @PostMapping
+    public Mono<User> createUser(@RequestBody User user) {
+        return userRepository.save(user);
+    }
 }
 
