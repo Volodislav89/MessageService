@@ -18,5 +18,9 @@ public class UserController {
     @Autowired
     UserRepository userRepository;
 
+    @GetMapping
+    public Flux<User> getAllUsers() {
+        return userRepository.findAll(Sort.by(Sort.Direction.ASC));
+    }
 }
 
