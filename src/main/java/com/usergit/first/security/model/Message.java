@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
@@ -13,5 +14,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @ToString
 
 public class Message {
+    @Id
+    private String id;
     private  String content;
+
+    public Message(String content) {
+        this.content = content;
+    }
 }

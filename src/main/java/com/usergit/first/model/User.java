@@ -32,15 +32,11 @@ public class User implements UserDetails {
     private int age;
     private String password;
     private Boolean enabled;
+    private Profile profile = new Profile();
 
     private List<Role> roles = new ArrayList<>();
     public void addRoleToList (Role role) {
         this.roles.add(role);
-    }
-
-    private List<Message> messages = new ArrayList<>();
-    public void addMessageToList (Message message) {
-        this.messages.add(message);
     }
 
     @Override
